@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from restaurant.models import Server, Table, Customer, Item
 
 users = [
@@ -93,59 +93,102 @@ menu = [
     {"name": "Craft Beer", "price": 4.99},
 ]
 
+server_permissions = [
+    "view_customer",
+    "view_item",
+    "change_order",
+    "delete_order",
+    "view_order",
+    "view_orderitem",
+    "view_server",
+    "change_table",
+    "view_table",
+]
+
+customer_permissions = [
+    "view_customer",
+    "view_item",
+    "add_order",
+    "change_order",
+    "delete_order",
+    "view_order",
+    "view_table",
+]
+
 
 def populate():
+    """
+    Creates (or updates) dummy data to test the app
+    """
+    # Create user groups
+    print("Creating groups...")
+    server_group, created = Group.objects.get_or_create(name="Server")
+    if created:
+        for permission in server_permissions:
+            server_group.permissions.add(Permission.objects.get(codename=permission))
+        print("\tGroup created")
+    customer_group, created = Group.objects.get_or_create(name="Customer")
+    if created:
+        for permission in customer_permissions:
+            customer_group.permissions.add(Permission.objects.get(codename=permission))
+        print("\tGroup created")
     # Create servers with their users and tables
     print("Creating servers...")
     for i in range(5):
         # Create user
-        user = User.objects.create_user(
+        user, created = User.objects.get_or_create(
             username=users[i]["username"],
-            password=users[i]["password"],
             email=users[i]["email"],
         )
+        user.set_password(users[i]["password"])
         user.first_name = users[i]["first_name"]
         user.last_name = users[i]["last_name"]
-        print("\tUser created")
+        user.groups.add(server_group)
+        print("\tUser created") if created else print("\tUser updated")
         user.save()
 
         # Create server
-        server = Server(
+        server, created = Server.objects.get_or_create(
             user=user, name=f"{user.first_name} {user.last_name}", salary=100000
         )
-        print("\tServer created")
+        print("\tServer created") if created else print("\tServer updated")
         server.save()
 
         # Create tables (two per server)
-        t = Table(number=i + 1, server=server)
-        print("\tTable created")
-        t.save()
-        t = Table(number=i + 6, server=server)
-        print("\tTable created")
-        t.save()
+        table, created = Table.objects.get_or_create(number=i + 1, server=server)
+        print("\tTable created") if created else print("\tTable updated")
+        table.save()
+        table, created = Table.objects.get_or_create(number=i + 6, server=server)
+        print("\tTable created") if created else print("\tTable updated")
+        table.save()
 
     # Create customers with their users
     print("Creating customers...")
     for i in range(5, 10):
         # Create user
-        user = User.objects.create_user(
+        user, created = User.objects.get_or_create(
             username=users[i]["username"],
-            password=users[i]["password"],
             email=users[i]["email"],
         )
+        user.set_password(users[i]["password"])
         user.first_name = users[i]["first_name"]
         user.last_name = users[i]["last_name"]
-        print("\tUser created")
+        user.groups.add(customer_group)
+        print("\tUser created") if created else print("\tUser updated")
         user.save()
 
         # Create customer
-        customer = Customer(user=user, name=f"{user.first_name} {user.last_name}")
-        print("\tCustomer created")
+        customer, created = Customer.objects.get_or_create(
+            user=user, name=f"{user.first_name} {user.last_name}"
+        )
+        print("\tCustomer created") if created else print("\tCustomer updated")
         customer.save()
 
     # Create menu items
     print("Creating menu items...")
-    for item in menu:
-        i = Item(name=item["name"], price=item["price"])
-        print(f"\tItem {item['name']} created")
-        i.save()
+    for itemObj in menu:
+        item, created = Item.objects.get_or_create(
+            name=itemObj["name"], price=itemObj["price"]
+        )
+        print("\tItem created") if created else print("\tItem updated")
+        item.save()
