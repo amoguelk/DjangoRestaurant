@@ -3,7 +3,13 @@
   <img alt="Version" src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" />
 </p>
 
-> A simple backend API for a restaurant.
+> A simple backend API for a restaurant
+
+## Install
+
+```sh
+pip install -r requirements.py
+```
 
 ## Usage
 
