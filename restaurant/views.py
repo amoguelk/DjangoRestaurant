@@ -1,11 +1,13 @@
 """Django modules"""
 from django.shortcuts import render
+from django.contrib.auth.models import User
 
 """REST Framework modules"""
 from rest_framework import generics
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework import permissions
 from django_filters.rest_framework import DjangoFilterBackend
 
 """App modules"""
@@ -16,6 +18,73 @@ from restaurant.models import *
 def index(request):
     """Main view"""
     return render(request, "index.html")
+
+
+def get_permission(model, method, user):
+    print("👽", method)
+    if method == "GET":
+        return user.has_perm(f"view_{model}")
+    if method == "POST":
+        return user.has_perm(f"add_{model}")
+    if method == "PUT" or method == "PATCH":
+        return user.has_perm(f"change_{model}")
+    if method == "DELETE":
+        return user.has_perm(f"delete_{model}")
+    return False
+
+
+class ServerAccessPermission(permissions.BasePermission):
+    message = "You do not have the permissions for this action"
+
+    def has_permission(self, request, view):
+        user = User.objects.get(username=request.user)
+
+        return get_permission("server", request.method, user)
+
+
+class TableAccessPermission(permissions.BasePermission):
+    message = "You do not have the permissions for this action"
+
+    def has_permission(self, request, view):
+        user = User.objects.get(username=request.user)
+
+        return get_permission("table", request.method, user)
+
+
+class CustomerAccessPermission(permissions.BasePermission):
+    message = "You do not have the permissions for this action"
+
+    def has_permission(self, request, view):
+        user = User.objects.get(username=request.user)
+
+        return get_permission("customer", request.method, user)
+
+
+class OrderAccessPermission(permissions.BasePermission):
+    message = "You do not have the permissions for this action"
+
+    def has_permission(self, request, view):
+        user = User.objects.get(username=request.user)
+
+        return get_permission("order", request.method, user)
+
+
+class ItemAccessPermission(permissions.BasePermission):
+    message = "You do not have the permissions for this action"
+
+    def has_permission(self, request, view):
+        user = User.objects.get(username=request.user)
+
+        return get_permission("item", request.method, user)
+
+
+class OrderItemAccessPermission(permissions.BasePermission):
+    message = "You do not have the permissions for this action"
+
+    def has_permission(self, request, view):
+        user = User.objects.get(username=request.user)
+
+        return get_permission("orderitem", request.method, user)
 
 
 """
@@ -34,7 +103,7 @@ class ServerList(generics.ListCreateAPIView):
 
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, ServerAccessPermission]
     pagination_class = LimitOffsetPagination
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["name"]
@@ -50,7 +119,7 @@ class ServerDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, ServerAccessPermission]
 
 
 """
@@ -69,7 +138,7 @@ class TableList(generics.ListCreateAPIView):
 
     queryset = Table.objects.all()
     serializer_class = TableSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, TableAccessPermission]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ["status"]
     pagination_class = LimitOffsetPagination
@@ -85,7 +154,7 @@ class TableDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Table.objects.all()
     serializer_class = TableSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, TableAccessPermission]
 
 
 """
@@ -104,7 +173,7 @@ class CustomerList(generics.ListCreateAPIView):
 
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, CustomerAccessPermission]
     pagination_class = LimitOffsetPagination
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["name"]
@@ -120,7 +189,7 @@ class CustomerDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, CustomerAccessPermission]
 
 
 """
@@ -139,7 +208,7 @@ class OrderList(generics.ListCreateAPIView):
 
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, OrderAccessPermission]
     pagination_class = LimitOffsetPagination
     filter_backends = [OrderingFilter, DjangoFilterBackend]
     ordering_fields = ["table"]
@@ -155,7 +224,7 @@ class OrderDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, OrderAccessPermission]
 
 
 """
@@ -174,7 +243,7 @@ class ItemList(generics.ListCreateAPIView):
 
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, ItemAccessPermission]
     pagination_class = LimitOffsetPagination
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["name"]
@@ -190,7 +259,7 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, ItemAccessPermission]
 
 
 """
@@ -209,7 +278,7 @@ class OrderItemList(generics.ListCreateAPIView):
 
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, OrderItemAccessPermission]
     pagination_class = LimitOffsetPagination
     filter_backends = [OrderingFilter, DjangoFilterBackend]
     filterset_fields = ["order", "order__table"]
@@ -225,4 +294,4 @@ class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated, OrderItemAccessPermission]
