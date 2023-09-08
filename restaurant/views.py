@@ -49,71 +49,70 @@ class CustomListCreateAPIView(generics.ListCreateAPIView):
 """
 
 
-# def get_permission(model, method, user):
-#     print("👽", method)
-#     if method == "GET":
-#         return user.has_perm(f"view_{model}")
-#     if method == "POST":
-#         return user.has_perm(f"add_{model}")
-#     if method == "PUT" or method == "PATCH":
-#         return user.has_perm(f"change_{model}")
-#     if method == "DELETE":
-#         return user.has_perm(f"delete_{model}")
-#     return False
+def get_permission(model, method, user):
+    if method == "GET":
+        return user.has_perm(f"view_{model}")
+    if method == "POST":
+        return user.has_perm(f"add_{model}")
+    if method == "PUT" or method == "PATCH":
+        return user.has_perm(f"change_{model}")
+    if method == "DELETE":
+        return user.has_perm(f"delete_{model}")
+    return False
 
 
-# class ServerAccessPermission(permissions.BasePermission):
-#     message = "You do not have the permissions for this action"
+class ServerAccessPermission(permissions.BasePermission):
+    message = "You do not have the permissions for this action"
 
-#     def has_permission(self, request, view):
-#         user = User.objects.get(username=request.user)
+    def has_permission(self, request, view):
+        user = User.objects.get(username=request.user)
 
-#         return get_permission("server", request.method, user)
-
-
-# class TableAccessPermission(permissions.BasePermission):
-#     message = "You do not have the permissions for this action"
-
-#     def has_permission(self, request, view):
-#         user = User.objects.get(username=request.user)
-
-#         return get_permission("table", request.method, user)
+        return get_permission("server", request.method, user)
 
 
-# class CustomerAccessPermission(permissions.BasePermission):
-#     message = "You do not have the permissions for this action"
+class TableAccessPermission(permissions.BasePermission):
+    message = "You do not have the permissions for this action"
 
-#     def has_permission(self, request, view):
-#         user = User.objects.get(username=request.user)
+    def has_permission(self, request, view):
+        user = User.objects.get(username=request.user)
 
-#         return get_permission("customer", request.method, user)
-
-
-# class OrderAccessPermission(permissions.BasePermission):
-#     message = "You do not have the permissions for this action"
-
-#     def has_permission(self, request, view):
-#         user = User.objects.get(username=request.user)
-
-#         return get_permission("order", request.method, user)
+        return get_permission("table", request.method, user)
 
 
-# class ItemAccessPermission(permissions.BasePermission):
-#     message = "You do not have the permissions for this action"
+class CustomerAccessPermission(permissions.BasePermission):
+    message = "You do not have the permissions for this action"
 
-#     def has_permission(self, request, view):
-#         user = User.objects.get(username=request.user)
+    def has_permission(self, request, view):
+        user = User.objects.get(username=request.user)
 
-#         return get_permission("item", request.method, user)
+        return get_permission("customer", request.method, user)
 
 
-# class OrderItemAccessPermission(permissions.BasePermission):
-#     message = "You do not have the permissions for this action"
+class OrderAccessPermission(permissions.BasePermission):
+    message = "You do not have the permissions for this action"
 
-#     def has_permission(self, request, view):
-#         user = User.objects.get(username=request.user)
+    def has_permission(self, request, view):
+        user = User.objects.get(username=request.user)
 
-#         return get_permission("orderitem", request.method, user)
+        return get_permission("order", request.method, user)
+
+
+class ItemAccessPermission(permissions.BasePermission):
+    message = "You do not have the permissions for this action"
+
+    def has_permission(self, request, view):
+        user = User.objects.get(username=request.user)
+
+        return get_permission("item", request.method, user)
+
+
+class OrderItemAccessPermission(permissions.BasePermission):
+    message = "You do not have the permissions for this action"
+
+    def has_permission(self, request, view):
+        user = User.objects.get(username=request.user)
+
+        return get_permission("orderitem", request.method, user)
 
 
 """
