@@ -31,14 +31,14 @@ def index(request):
 
 class CustomListCreateAPIView(generics.ListCreateAPIView):
     def filter_queryset(self, queryset):
-        print("\n👾 queryset before filters:\n", queryset, end="\n\n")
+        # print("\n🪲 queryset before filters:\n", queryset, end="\n\n")
         queryset = super().filter_queryset(queryset)
-        print("\n👾 queryset after filters:\n", queryset, end="\n\n")
+        # print("\n🪲 queryset after filters:\n", queryset, end="\n\n")
         return queryset
 
     def paginate_queryset(self, queryset):
         queryset = super().paginate_queryset(queryset)
-        print("\n👾 queryset after pagination:\n", queryset, end="\n\n")
+        # print("\n🪲 queryset after pagination:\n", queryset, end="\n\n")
         return queryset
 
 
