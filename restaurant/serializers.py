@@ -58,14 +58,3 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ["id", "table", "status", "item"]
-
-
-# ! class OrderItemSerializer(serializers.ModelSerializer):
-# !     """OrderItem model serializer"""
-
-# !     order = OrderSerializer()
-# !     item = ItemSerializer()
-
-# !     class Meta:
-# !         model = OrderItem
-# !         fields = ["id", "order", "item"]
