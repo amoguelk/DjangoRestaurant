@@ -27,6 +27,7 @@ class TableAdmin(admin.ModelAdmin):
     list_display = ["number", "server", "status"]
     ordering = ["number", "server"]
     search_fields = ["status", "server"]
+    list_filter = ["status"]
     actions = ["make_empty", "make_occupied"]
 
     @admin.action(description="Mark selected tables as empty")
@@ -64,7 +65,9 @@ admin.site.register(Customer, CustomerAdmin)
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ["table", "status"]
-    ordering = ["table", "status"]
+    ordering = ["table"]
+    list_filter = ["status"]
+    search_fields = ["item"]
     actions = ["make_in_process", "make_completed", "make_cancelled"]
 
     @admin.action(description="Mark selected orders as in process")
@@ -89,22 +92,23 @@ admin.site.register(Order, OrderAdmin)
 
 
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ["name", "price"]
+    list_display = ["name", "price", "is_available"]
     search_fields = ["name"]
     ordering = ["name", "price"]
+    list_filter = ["is_available"]
 
 
 admin.site.register(Item, ItemAdmin)
-"""
-------------------------------------
---------- ORDER_ITEM ADMIN ---------
-------------------------------------
-"""
+# ! """
+# ! ------------------------------------
+# ! --------- ORDER_ITEM ADMIN ---------
+# ! ------------------------------------
+# ! """
 
 
-class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ["order", "item"]
-    ordering = ["order", "item"]
+# ! class OrderItemAdmin(admin.ModelAdmin):
+# !     list_display = ["order", "item"]
+# !     ordering = ["order", "item"]
 
 
-admin.site.register(OrderItem, OrderItemAdmin)
+# ! admin.site.register(OrderItem, OrderItemAdmin)

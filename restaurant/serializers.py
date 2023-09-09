@@ -41,30 +41,31 @@ class CustomerSerializer(serializers.ModelSerializer):
         fields = ["id", "user", "name", "table"]
 
 
-class OrderSerializer(serializers.ModelSerializer):
-    """Order model serializer"""
-
-    table = TableSerializer()
-
-    class Meta:
-        model = Order
-        fields = ["id", "table", "status"]
-
-
 class ItemSerializer(serializers.ModelSerializer):
     """Item model serializer"""
 
     class Meta:
         model = Item
-        fields = ["id", "name", "price"]
+        fields = ["id", "name", "price", "is_available"]
 
 
-class OrderItemSerializer(serializers.ModelSerializer):
-    """OrderItem model serializer"""
+class OrderSerializer(serializers.ModelSerializer):
+    """Order model serializer"""
 
-    order = OrderSerializer()
-    item = ItemSerializer()
+    table = TableSerializer()
+    item = ItemSerializer(many=True)
 
     class Meta:
-        model = OrderItem
-        fields = ["id", "order", "item"]
+        model = Order
+        fields = ["id", "table", "status", "item"]
+
+
+# ! class OrderItemSerializer(serializers.ModelSerializer):
+# !     """OrderItem model serializer"""
+
+# !     order = OrderSerializer()
+# !     item = ItemSerializer()
+
+# !     class Meta:
+# !         model = OrderItem
+# !         fields = ["id", "order", "item"]

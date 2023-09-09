@@ -20,7 +20,7 @@ class Table(models.Model):
         ("EMPTY", "Empty"),
         ("OCCUPIED", "Occupied"),
     ]
-    number = models.IntegerField(unique=True)
+    number = models.IntegerField()
     server = models.ForeignKey(Server, on_delete=models.CASCADE)
     status = models.CharField(max_length=50, choices=STATUS_TYPES, default="EMPTY")
 
@@ -39,6 +39,17 @@ class Customer(models.Model):
         return f"{self.name}"
 
 
+class Item(models.Model):
+    """Represents an item on the menu"""
+
+    name = models.CharField(max_length=50)
+    price = models.FloatField(default=0.0)
+    is_available = models.BooleanField(default=True)
+
+    def __str__(self) -> str:
+        return f"{self.name}"
+
+
 class Order(models.Model):
     """Represents a group of items ordered by a client"""
 
@@ -49,20 +60,11 @@ class Order(models.Model):
     ]
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
     status = models.CharField(max_length=50, choices=STATUS_TYPES, default="IN PROCESS")
+    item = models.ManyToManyField(Item, related_name="order_item")
 
 
-class Item(models.Model):
-    """Represents an item on the menu"""
+# ! class OrderItem(models.Model):
+# !     """Links an item on the menu to an order"""
 
-    name = models.CharField(max_length=50)
-    price = models.FloatField(default=0.0)
-
-    def __str__(self) -> str:
-        return f"{self.name}"
-
-
-class OrderItem(models.Model):
-    """Links an item on the menu to an order"""
-
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+# !     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+# !     item = models.ForeignKey(Item, on_delete=models.CASCADE)
