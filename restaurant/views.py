@@ -31,14 +31,14 @@ def index(request):
 
 class CustomListCreateAPIView(generics.ListCreateAPIView):
     def filter_queryset(self, queryset):
-        print("\n👾 queryset before filters:\n", queryset, end="\n\n")
+        # print("\n🪲 queryset before filters:\n", queryset, end="\n\n")
         queryset = super().filter_queryset(queryset)
-        print("\n👾 queryset after filters:\n", queryset, end="\n\n")
+        # print("\n🪲 queryset after filters:\n", queryset, end="\n\n")
         return queryset
 
     def paginate_queryset(self, queryset):
         queryset = super().paginate_queryset(queryset)
-        print("\n👾 queryset after pagination:\n", queryset, end="\n\n")
+        # print("\n🪲 queryset after pagination:\n", queryset, end="\n\n")
         return queryset
 
 
@@ -240,7 +240,7 @@ class OrderList(CustomListCreateAPIView):
     pagination_class = LimitOffsetPagination
     filter_backends = [OrderingFilter, DjangoFilterBackend]
     ordering_fields = ["table"]
-    filterset_fields = ["table"]
+    filterset_fields = ["table", "status"]
 
 
 class OrderDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -273,9 +273,10 @@ class ItemList(CustomListCreateAPIView):
     serializer_class = ItemSerializer
     permission_classes = [IsAuthenticated]
     pagination_class = LimitOffsetPagination
-    filter_backends = [SearchFilter, OrderingFilter]
+    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ["name"]
     ordering_fields = ["name", "price"]
+    filterset_fields = ["is_available"]
 
 
 class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -297,29 +298,29 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 """
 
 
-class OrderItemList(CustomListCreateAPIView):
-    """
-    API endpoint for items linked to orders
+# ! class OrderItemList(CustomListCreateAPIView):
+# !     """
+# !     API endpoint for items linked to orders
 
-    View for GET, POST
-    """
+# !     View for GET, POST
+# !     """
 
-    queryset = OrderItem.objects.all()
-    serializer_class = OrderItemSerializer
-    permission_classes = [IsAuthenticated]
-    pagination_class = LimitOffsetPagination
-    filter_backends = [OrderingFilter, DjangoFilterBackend]
-    filterset_fields = ["order", "order__table"]
-    ordering_fields = ["order", "item"]
+# !     queryset = OrderItem.objects.all()
+# !     serializer_class = OrderItemSerializer
+# !     permission_classes = [IsAuthenticated]
+# !     pagination_class = LimitOffsetPagination
+# !     filter_backends = [OrderingFilter, DjangoFilterBackend]
+# !     filterset_fields = ["order", "order__table"]
+# !     ordering_fields = ["order", "item"]
 
 
-class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint for items linked to orders
+# ! class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):
+# !     """
+# !     API endpoint for items linked to orders
 
-    View for GET, PUT, PATCH, DELETE
-    """
+# !     View for GET, PUT, PATCH, DELETE
+# !     """
 
-    queryset = OrderItem.objects.all()
-    serializer_class = OrderItemSerializer
-    permission_classes = [IsAuthenticated]
+# !     queryset = OrderItem.objects.all()
+# !     serializer_class = OrderItemSerializer
+# !     permission_classes = [IsAuthenticated]
