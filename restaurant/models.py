@@ -61,10 +61,3 @@ class Order(models.Model):
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
     status = models.CharField(max_length=50, choices=STATUS_TYPES, default="IN PROCESS")
     item = models.ManyToManyField(Item, related_name="order_item")
-
-
-# ! class OrderItem(models.Model):
-# !     """Links an item on the menu to an order"""
-
-# !     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-# !     item = models.ForeignKey(Item, on_delete=models.CASCADE)

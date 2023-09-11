@@ -41,6 +41,10 @@ class CustomListCreateAPIView(generics.ListCreateAPIView):
         # print("\n🪲 queryset after pagination:\n", queryset, end="\n\n")
         return queryset
 
+    def create(self, request, *args, **kwargs):
+        print("🪲 create(): request = ", request, "🪲\n")
+        return super().create(request, *args, **kwargs)
+
 
 """
 ------------------------------------
@@ -289,38 +293,3 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     permission_classes = [IsAuthenticated]
-
-
-"""
-------------------------------------
---------- ORDER_ITEM VIEWS ---------
-------------------------------------
-"""
-
-
-# ! class OrderItemList(CustomListCreateAPIView):
-# !     """
-# !     API endpoint for items linked to orders
-
-# !     View for GET, POST
-# !     """
-
-# !     queryset = OrderItem.objects.all()
-# !     serializer_class = OrderItemSerializer
-# !     permission_classes = [IsAuthenticated]
-# !     pagination_class = LimitOffsetPagination
-# !     filter_backends = [OrderingFilter, DjangoFilterBackend]
-# !     filterset_fields = ["order", "order__table"]
-# !     ordering_fields = ["order", "item"]
-
-
-# ! class OrderItemDetail(generics.RetrieveUpdateDestroyAPIView):
-# !     """
-# !     API endpoint for items linked to orders
-
-# !     View for GET, PUT, PATCH, DELETE
-# !     """
-
-# !     queryset = OrderItem.objects.all()
-# !     serializer_class = OrderItemSerializer
-# !     permission_classes = [IsAuthenticated]
