@@ -99,16 +99,3 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Item, ItemAdmin)
-# ! """
-# ! ------------------------------------
-# ! --------- ORDER_ITEM ADMIN ---------
-# ! ------------------------------------
-# ! """
-
-
-# ! class OrderItemAdmin(admin.ModelAdmin):
-# !     list_display = ["order", "item"]
-# !     ordering = ["order", "item"]
-
-
-# ! admin.site.register(OrderItem, OrderItemAdmin)
