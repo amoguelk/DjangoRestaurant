@@ -41,6 +41,10 @@ class CustomListCreateAPIView(generics.ListCreateAPIView):
         # print("\n🪲 queryset after pagination:\n", queryset, end="\n\n")
         return queryset
 
+    def create(self, request, *args, **kwargs):
+        print("🪲 create(): request = ", request, "🪲\n")
+        return super().create(request, *args, **kwargs)
+
 
 """
 ------------------------------------
@@ -289,10 +293,3 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     permission_classes = [IsAuthenticated]
-
-
-"""
-------------------------------------
---------- ORDER_ITEM VIEWS ---------
-------------------------------------
-"""
