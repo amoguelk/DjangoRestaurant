@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-11 15:42-0600\n"
+"POT-Creation-Date: 2023-09-12 09:55-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,10 +18,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: restaurant/templates/index.html:4
+#. Translators: Table empty status
+#: restaurant/models.py:23
+msgid "Empty"
+msgstr "Leer"
+
+#. Translators: Table occupied status
+#: restaurant/models.py:25
+msgid "Occupied"
+msgstr "Besetzt"
+
+#. Translators: Table string representation
+#: restaurant/models.py:33
+#, python-brace-format
+msgid "Table #{self.number}"
+msgstr "Tisch #{self.number}"
+
+#. Translators: Order in process status
+#: restaurant/models.py:63
+msgid "In process"
+msgstr "In Bearbeitung"
+
+#. Translators: Order completed status
+#: restaurant/models.py:65
+msgid "Completed"
+msgstr "Vollendet"
+
+#. Translators: Order cancelled status
+#: restaurant/models.py:67
+msgid "Cancelled"
+msgstr "Storniert"
+
+#. Translators: Homepage title
+#: restaurant/templates/index.html:5
 msgid "My Restaurant"
 msgstr "Mein Restaurant"
 
-#: restaurant/templates/index.html:7
+#. Translators: Homepage welcome text
+#: restaurant/templates/index.html:9
 msgid "Welcome"
 msgstr "Willkommen"
