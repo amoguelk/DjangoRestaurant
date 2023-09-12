@@ -2,7 +2,7 @@
 from typing import Any
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView
 
 """REST Framework modules"""
 from rest_framework import generics
@@ -17,9 +17,14 @@ from restaurant.serializers import *
 from restaurant.models import *
 
 
-def index(request):
-    """Main view"""
-    return render(request, "index.html")
+class HomePageView(TemplateView):
+    template_name = "index.html"
+
+
+# def index(request):
+#     """Main view"""
+#     print("🪲 Language:", request.LANGUAGE_CODE)
+#     return render(request, "index.html")
 
 
 """
