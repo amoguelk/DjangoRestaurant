@@ -1,10 +1,10 @@
-<html lang="en">
+{% load i18n %}
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Django Home</title>
+    <title>{% trans "My Restaurant" %}</title>
   </head>
   <body>
+    <h1>{% trans "Welcome" %}</h1>
     <ul>
       <li><a href="http://localhost:8000/restaurant/server">server</a></li>
       <li><a href="http://localhost:8000/restaurant/customer">customer</a></li>

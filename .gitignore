@@ -1,5 +1,11 @@
+# Django
 *.pyc
 __pycache__/
 db.sqlite3
 .vscode/
+
+# Translation
+*.mo
+
+# Extra
 *.drawio
