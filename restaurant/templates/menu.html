@@ -1,0 +1,14 @@
+{% load i18n %}
+<html>
+  <head>
+    <title>{% trans Menu %}</title>
+  </head>
+  <body>
+    <h1>{% trans Menu %}</h1>
+    <ul>
+      {% for i in items %}
+      <li>{{ i.name }} ${{ i.price }}</li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

@@ -36,8 +36,8 @@ python manage.py runserver
   - [x] DELETE
   - [x] PATCH
   - [x] Probar permisos de usuarios
-- [ ] Agregar un template que muestre los objetos del menú
-  - [ ] Usar tags
+- [x] Agregar un template que muestre los objetos del menú
+  - [x] Usar tags
 - [ ] Agregar throttling
 - [ ] Agregar field para imágenes de productos
   - Integrar en DRF
