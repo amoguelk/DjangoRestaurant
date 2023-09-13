@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 
 """REST Framework modules"""
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import permissions
@@ -58,70 +58,59 @@ class CustomListCreateAPIView(generics.ListCreateAPIView):
 """
 
 
-def get_permission(model, method, user):
-    if method == "GET":
-        return user.has_perm(f"view_{model}")
-    if method == "POST":
-        return user.has_perm(f"add_{model}")
-    if method == "PUT" or method == "PATCH":
-        return user.has_perm(f"change_{model}")
-    if method == "DELETE":
-        return user.has_perm(f"delete_{model}")
-    return False
+class IsAdmin(IsAdminUser):
+    message = "You need to be an admin to perform this action"
+
+    def has_permission(self, request, view):
+        return super().has_permission(request, view)
 
 
-class ServerAccessPermission(permissions.BasePermission):
-    message = "You do not have the permissions for this action"
+class IsAdminOrIsCustomer(IsAdminUser):
+    message = "You need to be an admin or a customer to perform this action"
 
     def has_permission(self, request, view):
         user = User.objects.get(username=request.user)
-
-        return get_permission("server", request.method, user)
-
-
-class TableAccessPermission(permissions.BasePermission):
-    message = "You do not have the permissions for this action"
-
-    def has_permission(self, request, view):
-        user = User.objects.get(username=request.user)
-
-        return get_permission("table", request.method, user)
+        try:
+            Customer.objects.get(user=user)
+            return True
+        except Customer.DoesNotExist:
+            return super().has_permission(request, view)
 
 
-class CustomerAccessPermission(permissions.BasePermission):
-    message = "You do not have the permissions for this action"
+class IsAdminOrIsServer(IsAdminUser):
+    message = "You need to be an admin or a server to perform this action"
 
     def has_permission(self, request, view):
         user = User.objects.get(username=request.user)
-
-        return get_permission("customer", request.method, user)
-
-
-class OrderAccessPermission(permissions.BasePermission):
-    message = "You do not have the permissions for this action"
-
-    def has_permission(self, request, view):
-        user = User.objects.get(username=request.user)
-
-        return get_permission("order", request.method, user)
+        try:
+            Server.objects.get(user=user)
+            return True
+        except Server.DoesNotExist:
+            return super().has_permission(request, view)
 
 
-class ItemAccessPermission(permissions.BasePermission):
-    message = "You do not have the permissions for this action"
+class IsServer(permissions.BasePermission):
+    message = "You need to be a server to perform this action"
 
     def has_permission(self, request, view):
         user = User.objects.get(username=request.user)
+        try:
+            Server.objects.get(user=user)
+            return True
+        except Server.DoesNotExist:
+            return False
 
-        return get_permission("item", request.method, user)
 
-
-class OrderItemAccessPermission(permissions.BasePermission):
-    message = "You do not have the permissions for this action"
+class IsCustomer(permissions.BasePermission):
+    message = "You need to be a customer to perform this action"
 
     def has_permission(self, request, view):
         user = User.objects.get(username=request.user)
-
-        return get_permission("orderitem", request.method, user)
+        try:
+            Customer.objects.get(user=user)
+            return True
+        except Customer.DoesNotExist:
+            return False
 
 
 """
@@ -140,7 +129,7 @@ class ServerList(CustomListCreateAPIView):
 
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdmin]
     pagination_class = LimitOffsetPagination
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["name"]
@@ -156,7 +145,7 @@ class ServerDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminOrIsServer]
 
 
 """
@@ -175,7 +164,7 @@ class TableList(CustomListCreateAPIView):
 
     queryset = Table.objects.all()
     serializer_class = TableSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdmin]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ["status"]
     pagination_class = LimitOffsetPagination
@@ -191,7 +180,7 @@ class TableDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Table.objects.all()
     serializer_class = TableSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminOrIsServer]
 
 
 """
@@ -210,7 +199,7 @@ class CustomerList(CustomListCreateAPIView):
 
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminOrIsCustomer]
     pagination_class = LimitOffsetPagination
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["name"]
@@ -226,7 +215,7 @@ class CustomerDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdmin]
 
 
 """
@@ -245,7 +234,7 @@ class OrderList(CustomListCreateAPIView):
 
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminOrIsCustomer]
     pagination_class = LimitOffsetPagination
     filter_backends = [OrderingFilter, DjangoFilterBackend]
     ordering_fields = ["table"]
@@ -280,7 +269,7 @@ class ItemList(CustomListCreateAPIView):
 
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdmin]
     pagination_class = LimitOffsetPagination
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ["name"]
@@ -297,4 +286,4 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdmin]
