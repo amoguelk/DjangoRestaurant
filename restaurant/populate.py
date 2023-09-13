@@ -99,7 +99,6 @@ server_permissions = [
     "change_order",
     "delete_order",
     "view_order",
-    "view_orderitem",
     "view_server",
     "change_table",
     "view_table",

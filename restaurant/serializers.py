@@ -7,7 +7,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "username", "email"]
+        fields = ["id", "username", "email", "password"]
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
 
     def create(self, validated_data):
         return super().create(validated_data)
@@ -19,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 class ServerSerializer(serializers.ModelSerializer):
     """Server model serializer"""
 
-    user = UserSerializer(read_only=True)
+    user = UserSerializer()
 
     class Meta:
         model = Server
@@ -35,7 +38,7 @@ class ServerSerializer(serializers.ModelSerializer):
 class TableSerializer(serializers.ModelSerializer):
     """Table model serializer"""
 
-    server = ServerSerializer(read_only=True)
+    server = ServerSerializer()
 
     class Meta:
         model = Table
@@ -51,8 +54,8 @@ class TableSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     """Customer model serializer"""
 
-    user = UserSerializer(read_only=True)
-    table = TableSerializer(read_only=True)
+    user = UserSerializer()
+    table = TableSerializer()
 
     class Meta:
         model = Customer
@@ -82,7 +85,7 @@ class ItemSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     """Order model serializer"""
 
-    table = TableSerializer(read_only=True)
+    table = TableSerializer()
     item = ItemSerializer(many=True)
 
     class Meta:
