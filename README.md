@@ -38,7 +38,7 @@ python manage.py runserver
   - [x] Probar permisos de usuarios
 - [x] Agregar un template que muestre los objetos del menú
   - [x] Usar tags
-- [ ] Agregar throttling
+- [x] Agregar throttling
 - [ ] Agregar field para imágenes de productos
   - Integrar en DRF
 - [ ] Agregar método en Order para enviar correo al cliente

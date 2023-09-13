@@ -9,6 +9,7 @@ from django.template import loader
 """REST Framework modules"""
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.throttling import UserRateThrottle as BaseUserRateThrottle
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import permissions
@@ -120,6 +121,21 @@ class IsCustomer(permissions.BasePermission):
 
 """
 ------------------------------------
+------------ THROTTLING ------------
+------------------------------------
+"""
+
+
+class UserRateThrottle(BaseUserRateThrottle):
+    """
+    Limit request to 10 per minute
+    """
+
+    rate = "10/min"
+
+
+"""
+------------------------------------
 ----------- SERVER VIEWS -----------
 ------------------------------------
 """
@@ -135,6 +151,7 @@ class ServerList(CustomListCreateAPIView):
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
     permission_classes = [IsAdmin]
+    throttle_classes = [UserRateThrottle]
     pagination_class = LimitOffsetPagination
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ["name"]
