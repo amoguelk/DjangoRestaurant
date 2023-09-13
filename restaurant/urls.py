@@ -3,6 +3,7 @@ from restaurant.views import *
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
+    path("menu/", MenuPageView.as_view(), name="menu"),
     path("api/", include("rest_framework.urls", namespace="rest_framework")),
     path("server/", ServerList.as_view()),
     path("server/<int:pk>/", ServerDetail.as_view()),

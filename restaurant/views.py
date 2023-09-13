@@ -3,6 +3,8 @@ from typing import Any
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.views.generic import TemplateView
+from django.http import HttpResponse
+from django.template import loader
 
 """REST Framework modules"""
 from rest_framework import generics
@@ -21,10 +23,13 @@ class HomePageView(TemplateView):
     template_name = "index.html"
 
 
-# def index(request):
-#     """Main view"""
-#     print("🪲 Language:", request.LANGUAGE_CODE)
-#     return render(request, "index.html")
+class MenuPageView(TemplateView):
+    template_name = "menu.html"
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["items"] = Item.objects.all().values()
+        return context
 
 
 """
