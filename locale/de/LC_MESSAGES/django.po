@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-12 09:55-0600\n"
+"POT-Creation-Date: 2023-09-13 11:23-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,17 +35,17 @@ msgid "Table #{self.number}"
 msgstr "Tisch #{self.number}"
 
 #. Translators: Order in process status
-#: restaurant/models.py:63
+#: restaurant/models.py:64
 msgid "In process"
 msgstr "In Bearbeitung"
 
 #. Translators: Order completed status
-#: restaurant/models.py:65
+#: restaurant/models.py:66
 msgid "Completed"
 msgstr "Vollendet"
 
 #. Translators: Order cancelled status
-#: restaurant/models.py:67
+#: restaurant/models.py:68
 msgid "Cancelled"
 msgstr "Storniert"
 
@@ -58,3 +58,8 @@ msgstr "Mein Restaurant"
 #: restaurant/templates/index.html:9
 msgid "Welcome"
 msgstr "Willkommen"
+
+#. Translators: Menu page title
+#: restaurant/templates/menu.html:5 restaurant/templates/menu.html:9
+msgid "Menu"
+msgstr "Speisekarte"
