@@ -73,7 +73,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ["id", "name", "price", "is_available"]
+        fields = ["id", "name", "price", "is_available", "image"]
 
     def create(self, validated_data):
         return super().create(validated_data)
