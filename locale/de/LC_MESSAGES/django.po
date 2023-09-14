@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-13 20:59-0600\n"
+"POT-Creation-Date: 2023-09-14 10:02-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,33 +19,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Translators: Table empty status
-#: restaurant/models.py:24
+#: restaurant/models.py:23
 msgid "Empty"
 msgstr "Leer"
 
 #. Translators: Table occupied status
-#: restaurant/models.py:26
+#: restaurant/models.py:25
 msgid "Occupied"
 msgstr "Besetzt"
 
-#. Translators: Table string representation
-#: restaurant/models.py:34
-#, python-brace-format
-msgid "Table #{self.number}"
-msgstr "Tisch #{self.number}"
-
 #. Translators: Order in process status
-#: restaurant/models.py:65
+#: restaurant/models.py:63
 msgid "In process"
 msgstr "In Bearbeitung"
 
 #. Translators: Order completed status
-#: restaurant/models.py:67
+#: restaurant/models.py:65
 msgid "Completed"
 msgstr "Vollendet"
 
 #. Translators: Order cancelled status
-#: restaurant/models.py:69
+#: restaurant/models.py:67
 msgid "Cancelled"
 msgstr "Storniert"
 
@@ -64,13 +58,19 @@ msgstr "Willkommen"
 msgid "Menu"
 msgstr "Speisekarte"
 
-#: restaurant/templates/order_email.html:5
-#: restaurant/templates/order_email.html:9
+#. Translators: Order email title
+#: restaurant/templates/order_email.html:6
+#: restaurant/templates/order_email.html:11
 msgid "Thank you!"
 msgstr ""
 
-#: restaurant/templates/order_email.html:11
+#. Translators: Order email body
+#: restaurant/templates/order_email.html:14
 msgid ""
-" You have successfully completed your order. Our\n"
-"      servers are now working on it! "
+" You have successfully completed your order. Our servers\n"
+"      are now working on it! "
 msgstr ""
+
+#, python-brace-format
+#~ msgid "Table #{self.number}"
+#~ msgstr "Tisch #{self.number}"
