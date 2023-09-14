@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from rest_framework import serializers
 from restaurant.models import *
 
@@ -7,38 +8,26 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "username", "email", "password"]
-        extra_kwargs = {
-            "password": {"write_only": True},
-        }
-
-    def create(self, validated_data):
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
+        fields = ["id", "username", "email"]
 
 
 class ServerSerializer(serializers.ModelSerializer):
     """Server model serializer"""
 
-    user = UserSerializer()
+    name = serializers.CharField(max_length=50, read_only=True)
 
     class Meta:
         model = Server
         fields = ["id", "user", "name", "salary"]
 
     def create(self, validated_data):
+        user = validated_data["user"]
+        validated_data["name"] = f"{user.first_name} {user.last_name}"
         return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
 
 
 class TableSerializer(serializers.ModelSerializer):
     """Table model serializer"""
-
-    server = ServerSerializer()
 
     class Meta:
         model = Table
@@ -54,18 +43,16 @@ class TableSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     """Customer model serializer"""
 
-    user = UserSerializer()
-    table = TableSerializer()
+    name = serializers.CharField(max_length=50, read_only=True)
 
     class Meta:
         model = Customer
         fields = ["id", "user", "name", "table"]
 
     def create(self, validated_data):
+        user = validated_data["user"]
+        validated_data["name"] = f"{user.first_name} {user.last_name}"
         return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -75,25 +62,34 @@ class ItemSerializer(serializers.ModelSerializer):
         model = Item
         fields = ["id", "name", "price", "is_available", "image"]
 
-    def create(self, validated_data):
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
-
 
 class OrderSerializer(serializers.ModelSerializer):
     """Order model serializer"""
-
-    table = TableSerializer()
-    item = ItemSerializer(many=True)
 
     class Meta:
         model = Order
         fields = ["id", "table", "status", "item"]
 
-    def create(self, validated_data):
-        return super().create(validated_data)
+    def order_created_email(self, table, items):
+        context = {"table": table, "items": items}
+        template = get_template("order_email.html").render(context)
 
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
+        print("🪲 EMAIL:\n", template, "\n")
+
+        # send_mail(
+        #     subject="Order created",
+        #     message=None,
+        #     from_email="from@example.com",
+        #     recipient_list=[user_email],
+        #     fail_silently=False,
+        #     html_message=template,
+        # )
+
+    def save(self, **kwargs):
+        valid = self.is_valid()
+        if valid:
+            table = self.validated_data["table"]
+            items = self.validated_data["item"]
+            self.order_created_email(table, items)
+
+        return super().save(**kwargs)
