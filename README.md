@@ -41,7 +41,7 @@ python manage.py runserver
 - [x] Agregar throttling
 - [x] Agregar field para imágenes de productos
   - Integrar en DRF
-- [ ] Agregar método en Order para enviar correo al cliente
+- [x] Agregar método en Order para enviar correo al cliente
   - Usa el `CustomListCreateAPIView`
   - El correo va en HTML
 
