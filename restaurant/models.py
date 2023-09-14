@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext
-from django.template.loader import get_template
 
 
 class Server(models.Model):
@@ -30,8 +29,7 @@ class Table(models.Model):
     status = models.CharField(max_length=50, choices=STATUS_TYPES, default="EMPTY")
 
     def __str__(self) -> str:
-        # Translators: Table string representation
-        return gettext(f"Table #{self.number}")
+        return f"Table #{self.number}"
 
 
 class Customer(models.Model):
